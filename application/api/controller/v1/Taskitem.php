@@ -8,12 +8,14 @@
 
 namespace app\api\controller\v1;
 use app\api\model\Taskitem as TaskitemModel;
+use app\lib\exception\TokenException;
 use think\Db;
 use app\lib\exception\SuccessMessage;
 use app\lib\exception\MissException;
 use app\lib\exception\ParameterException;
 use app\api\validate\IDMustBePositiveInt;
 use app\api\validate\AddTaskItemValidate;
+use app\api\service\AppToken;
 
 
 class Taskitem
@@ -32,6 +34,8 @@ class Taskitem
 
     public function removeTaskItem($id)
     {
+        $token = new AppToken();// 需要拿令牌，并且是管理员的令牌
+        $token->needSuperScope();
         $validate = new IDMustBePositiveInt();
         $validate->goCheck();
         $ret = TaskitemModel::ReMoveById($id);
@@ -48,6 +52,8 @@ class Taskitem
 
     public function updateTaskItemById($id,$name)
     {
+        $token = new AppToken();// 需要拿令牌，并且是管理员的令牌
+        $token->needSuperScope();
         $validate = new IDMustBePositiveInt();
         $validate->goCheck();
         if($name == ''){
@@ -69,6 +75,9 @@ class Taskitem
 
     public  function  insertTaskItem($name)
     {
+        $token = new AppToken();// 需要拿令牌，并且是管理员的令牌
+        $token->needSuperScope();
+
         $validate = new AddTaskItemValidate();
         $validate->goCheck();
         $ret = TaskitemModel::addTaskItem($name);

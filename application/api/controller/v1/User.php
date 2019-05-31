@@ -8,10 +8,13 @@
 
 namespace app\api\controller\v1;
 use app\api\model\User as UserModel;
+use app\api\model\Role as Userrole;
+use app\api\service\AppToken;
 use app\api\validate\AddUserValidate;
 use app\lib\exception\MissException;
 use app\api\validate\IDMustBePositiveInt;
 use app\lib\exception\SuccessMessage;
+use app\lib\enum\ScopeEnum;
 
 class User
 {
@@ -30,11 +33,23 @@ class User
                 'errorCode' => 10005
             ]);
         }
-        return $ret;
+
+        $id = $ret->getdata('id');
+        $role_id = $ret->getdata('role_id');
+        $scope = $role_id==1?ScopeEnum::Super:ScopeEnum::User;
+        $appToken = new AppToken();
+        $token  = $appToken->getToken($id,$scope);
+        $result =['token'=>$token,
+        'errorCode'=>0,
+        'msg'=>'ok'];
+        return json($result,true);
     }
 
     public function  insertUser($username,$password,$role)
     {
+       /* $token = new AppToken();// 需要拿令牌，并且是管理员的令牌
+        $token->needSuperScope();*/
+
         $validate = new AddUserValidate();
         $validate->goCheck();
         $ret =  UserModel::AddUser($username,$password,$role);
@@ -47,7 +62,11 @@ class User
         $data = ["id"=>$ret,'msg' => 'ok'];
         return json($data);
     }
-    public  function  removeUser($id){
+    public  function  removeUser($id)
+    {
+        $token = new AppToken();// 需要拿令牌，并且是管理员的令牌
+        $token->needSuperScope();
+
         $validate = new IDMustBePositiveInt();
         $validate->goCheck();
         $ret = UserModel::deleteUser($id);
@@ -64,6 +83,9 @@ class User
 
     public function getUsers()
     {
+       /* $token = new AppToken();// 需要拿令牌，并且是管理员的令牌
+        $token->needSuperScope();*/
+
         $ret = UserModel::getUserList();
         if(empty($ret)){
             throw new MissException([
@@ -76,6 +98,9 @@ class User
 
     public function  updateUserInfo($id,$password)
     {
+        $token = new AppToken();// 需要拿令牌，并且是管理员的令牌
+        $token->needSuperScope();
+
         $validate = new IDMustBePositiveInt();
         $validate->goCheck();
         if($password == ''){

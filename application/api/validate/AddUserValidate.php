@@ -14,6 +14,6 @@ class AddUserValidate extends BaseValidate
     protected $rule = [
         'username' => 'require|isNotEmpty',
         'password' => 'require|isNotEmpty',
-        'role'=>'require|isPositiveInteger'
+        'role'=>'require|isNotEmpty'
     ];
 }

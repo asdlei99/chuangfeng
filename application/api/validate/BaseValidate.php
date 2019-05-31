@@ -8,7 +8,6 @@
 
 namespace app\api\validate;
 use app\lib\exception\ParameterException;
-use app\lib\exception\TokenException;
 use think\Request;
 use think\Validate;
 

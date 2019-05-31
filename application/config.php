@@ -236,4 +236,8 @@ return [
         'var_page'  => 'page',
         'list_rows' => 15,
     ],
+    'secure' =>[
+        'token_expire_in'=>7200,
+        'token_salt'=>'chuangfengyangzhi',
+    ],
 ];

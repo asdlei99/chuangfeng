@@ -11,7 +11,7 @@ namespace app\api\model;
 
 class User extends BaseModel
 {
-    protected $hidden = ['delete_time', 'update_time'];
+    protected $hidden = ['delete_time', 'update_time','role_id','password'];
 
     public static  function  doLogin($username,$password){
         $data = ["nickname"=>$username,
@@ -27,11 +27,11 @@ class User extends BaseModel
         //状态正常的就不重复添加了。
         if(self::field('*')->where( $data )->find())
             return 0;
-
+        $role_id  = $role == '管理员'?1:2;
         $data = [
             'nickname' => $username,
             'password'=>$password,
-            'role_id'=>$role
+            'role_id'=>$role_id
         ];
         $model = User::create($data, true);
         return $model->id;
@@ -42,9 +42,14 @@ class User extends BaseModel
         return self::destroy($id);
     }
 
+
+    public function  role(){
+        return $this->belongsTo('role','role_id','id');
+    }
+
     public  static  function  getUserList()
     {
-        return self::field('id,nickname,role_id')->select(); //field可以指定筛选的字段
+        return self::with(['role'])->select(); //field可以指定筛选的字段
     }
 
     public static  function  updateUserInfo($id,$password)

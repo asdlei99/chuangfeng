@@ -32,3 +32,8 @@ Route::post("adduser","api/v1.User/insertUser");
 Route::post("deleteuser","api/v1.User/removeUser");
 Route::get("getUserList","api/v1.User/getUsers");
 Route::post("updateuserinfo","api/v1.User/updateUserInfo");
+
+
+Route::get("getConsumeList","api/v1.Consume/getConsumeList");
+
+Route::post("addConsumeItem","api/v1.Consume/insertConsumeItem");
