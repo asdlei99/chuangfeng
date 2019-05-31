@@ -35,5 +35,7 @@ Route::post("updateuserinfo","api/v1.User/updateUserInfo");
 
 
 Route::get("getConsumeList","api/v1.Consume/getConsumeList");
-
 Route::post("addConsumeItem","api/v1.Consume/insertConsumeItem");
+
+Route::get("getCostareas","api/v1.Costarea/getCostareas");
+Route::post("addCostareas","api/v1.Costarea/insertCostarea");

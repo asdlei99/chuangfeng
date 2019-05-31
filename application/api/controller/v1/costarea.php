@@ -3,34 +3,33 @@
  * Created by PhpStorm.
  * User: Venice
  * Date: 2019/5/31
- * Time: 10:31
+ * Time: 14:15
  */
 
 namespace app\api\controller\v1;
-use app\api\model\Consume as ConsumeModel;
-use  app\api\model\ConsumeItem as ConsumItemModel;
+use  app\api\model\Costarea as CostareaModel;
+use app\api\validate\AddCostAreasValidate;
 use app\lib\exception\MissException;
 
-class Consume
+class Costarea
 {
-    public  function  getConsumeList()
+    public function getCostareas()
     {
-        $ret = ConsumeModel::getConsumes();
+        $ret = CostareaModel::getCostArealist();
         if(empty($ret)){
             throw new MissException([
-                'msg' => '没有消耗品！',
+                'msg' => '还没有任何记账项目！',
                 'errorCode' => 10001
             ]);
         }
         return $ret;
     }
 
-
-    public  function insertConsumeItem($name,$itemname,$specs,$unit,$price)
+    public function insertCostarea($name)
     {
-        $id = ConsumeModel::insertConsume($name);
-        $ret = ConsumItemModel::insertConsumeItem($id,$itemname,$specs,$unit,$price);
-
+        $validate = new AddCostAreasValidate();
+        $validate->goCheck();
+        $ret =  CostareaModel::insertCostAreaList($name );
         if($ret){
             $data = ["id"=>$ret,'msg' => 'ok'];
             return json($data);
@@ -41,5 +40,4 @@ class Consume
             ]);
         }
     }
-
 }

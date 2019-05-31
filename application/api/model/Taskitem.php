@@ -38,7 +38,6 @@ class Taskitem extends BaseModel
 
     public  static  function  addTaskItem($name)
     {
-
         $data = ["name"=>$name];
         //状态正常的就不重复添加了。
         if(self::field('*')->where( $data )->find())
